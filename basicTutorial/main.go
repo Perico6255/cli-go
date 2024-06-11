@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/charmbracelet/lipgloss"
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -72,6 +73,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 func (m model) View() string {
 	// The header
+	mark := lipgloss.NewStyle().Background(lipgloss.Color("#7D56F4")).Width(20)
+	normal := lipgloss.NewStyle().Width(20)
 	s := "What should we buy at the market?\n\n"
 
 	// Iterate over our choices
@@ -83,14 +86,15 @@ func (m model) View() string {
 			cursor = ">" // cursor!
 		}
 
-		// Is this choice selected?
-		checked := " " // not selected
 		if _, ok := m.selected[i]; ok {
-			checked = "x" // selected!
+			s += mark.Render(fmt.Sprintf("%s %s", cursor, choice))
+		} else {
+			s += normal.Render(fmt.Sprintf("%s %s", cursor, choice))
 		}
+		s += "\n"
 
 		// Render the row
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
+
 	}
 
 	// The footer
